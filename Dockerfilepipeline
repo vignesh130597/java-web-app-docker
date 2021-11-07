@@ -1,0 +1,52 @@
+ def buildNumber = BUILD_NUMBER
+
+pipeline{
+    agent any;
+    
+   tools{
+       maven 'Maven'
+   }
+   
+   triggers{
+      pollSCM('* * * * *')
+   }
+   
+    stages{
+        stage('checkoutcode'){
+            steps{
+               git credentialsId: 'Git', url: 'https://github.com/vignesh130597/java-web-app-docker.git'
+            }
+        }
+        
+        stage('buildpackage'){
+            steps{
+                sh "mvn clean package"
+            }
+        }
+        
+        stage('buildimage'){
+            steps{
+                sh "docker build -t vignesh130597/maven-web-pipeline:${buildNumber} ."
+            }
+        }
+        
+        stage('login and push image'){
+            steps{
+                withCredentials([string(credentialsId: 'dockerLogin', variable: 'dockerLogin')]) {
+                sh "docker login -u vignesh130597 -p ${dockerLogin}"
+                
+                sh "docker push vignesh130597/maven-web-pipeline:${buildNumber}"
+            }
+            }
+        }
+        stage('deploy'){
+            steps{
+                sshagent(['dockerDeployServer']) {
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.119.29.174 docker rm -f mavenwebpipeline || true"
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.119.29.174 docker run -d --name mavenwebpipeline -p 7070:8080 vignesh130597/maven-web-pipeline:${buildNumber}"
+}
+            }
+        }
+    }
+    
+}
