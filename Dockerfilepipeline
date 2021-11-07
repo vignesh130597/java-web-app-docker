@@ -42,8 +42,8 @@ pipeline{
         stage('deploy'){
             steps{
                 sshagent(['dockerDeployServer']) {
-                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.119.29.174 docker rm -f mavenwebpipeline || true"
-                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.119.29.174 docker run -d --name mavenwebpipeline -p 7070:8080 vignesh130597/maven-web-pipeline:${buildNumber}"
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.116.50.195 docker rm -f mavenwebpipeline || true"
+                sh "ssh -o StrictHostKeyChecking=no ubuntu@18.116.50.195 docker run -d --name mavenwebpipeline -p 7070:8080 vignesh130597/maven-web-pipeline:${buildNumber}"
 }
             }
         }
