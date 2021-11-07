@@ -3,7 +3,7 @@
 pipeline{
     agent{
      label{
-        label 'jenkinsslave'
+        label 'nodeserver'
      }
     }
     
