@@ -1,7 +1,11 @@
  def buildNumber = BUILD_NUMBER
 
 pipeline{
-    agent any;
+    agent{
+     label{
+        label 'jenkinsnode'
+     }
+    }
     
    tools{
        maven 'Maven'
