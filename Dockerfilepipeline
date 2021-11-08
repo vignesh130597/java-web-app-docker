@@ -30,16 +30,7 @@ pipeline{
                 sh "docker build -t vignesh130597/maven-web-pipeline:${buildNumber} ."
             }
         }
-        
-        stage('sonarqube'){
-           steps{
-              withSonarQubeEnv('sonarserver'){
-			               sh "mvn clean sonar:sonar"
-			            }
-           }
-        
-        }
-        
+      
         stage('login and push image'){
             steps{
                 withCredentials([string(credentialsId: 'dockerLogin', variable: 'dockerLogin')]) {
