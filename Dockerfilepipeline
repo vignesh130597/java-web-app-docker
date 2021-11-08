@@ -31,6 +31,15 @@ pipeline{
             }
         }
         
+        stage('sonarqube'){
+           steps{
+              withSonarQubeEnv('sonarserver'){
+			               sh mvn celan sonar:sonar
+			            }
+           }
+        
+        }
+        
         stage('login and push image'){
             steps{
                 withCredentials([string(credentialsId: 'dockerLogin', variable: 'dockerLogin')]) {
