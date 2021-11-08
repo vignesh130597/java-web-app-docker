@@ -34,7 +34,7 @@ pipeline{
         stage('sonarqube'){
            steps{
               withSonarQubeEnv('sonarserver'){
-			               sh mvn celan sonar:sonar
+			               sh mvn clean sonar:sonar
 			            }
            }
         
