@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: javawebappdeployment
+  namespace: testns
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: javawebapp
+  strategy:
+       type: RollingUpdate
+       rollingUpdate:
+         maxUnavailable: 1
+  minReadySeconds: 30
+  template:
+    metadata:
+      labels:
+        app: javawebapp
+    spec:
+      containers:
+      - name: javawebappcontainer
+        image: vignesh130597/java-web-test-application:3
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: javawebappsvc
+spec:
+  selector:
+    app: javawebapp
+  ports:
+  - port: 80
+    targetPort: 8080
