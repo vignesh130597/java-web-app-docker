@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: javawebappdeployment
+  name: javawebappdeploymenthpa
   namespace: testns
 spec:
   replicas: 2
@@ -20,15 +20,22 @@ spec:
     spec:
       containers:
       - name: javawebappcontainer
-        image: vignesh130597/java-web-test-application:3
+        image: vignesh130597/java-web-test-application:5
         ports:
         - containerPort: 8080
+      resources:
+        requests:
+          cpu: "100m"
+          memory: "64Mi"
+        limits:
+          cpu: "100m"
+          memory: "128Mi"
+
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: javawebappsvc
-  namespace: testns
+  name: javawebappsvchpa
 spec:
   type: NodePort
   selector:
@@ -36,4 +43,30 @@ spec:
   ports:
   - port: 80
     targetPort: 8080
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpadeploymentautoscaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: javawebappdeploymenthpa
+  minReplicas: 2
+  maxReplicas: 4
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 40
+  - type: Resource
+    resource:
+     name: memory
+     target:
+      type: Utilization
+      averageUtilization: 40
+
 
