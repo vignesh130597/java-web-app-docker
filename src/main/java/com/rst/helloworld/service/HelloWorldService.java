@@ -14,7 +14,7 @@ public class HelloWorldService {
 
 		logger.debug("getDesc() is executed!");
 
-		return "Maven + Spring MVC + Jenkins + Dockers Example";
+		return "Maven + Spring MVC + Jenkins + DockerHub Example";
 
 	}
 
