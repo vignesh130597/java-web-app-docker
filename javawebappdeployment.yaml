@@ -23,14 +23,13 @@ spec:
         image: vignesh130597/java-web-test-application:5
         ports:
         - containerPort: 8080
-      resources:
-        requests:
-          cpu: "100m"
-          memory: "64Mi"
-        limits:
-          cpu: "100m"
-          memory: "128Mi"
-
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "64Mi"
+          limits:
+            cpu: "100m"
+            memory: "128Mi"
 ---
 apiVersion: v1
 kind: Service
